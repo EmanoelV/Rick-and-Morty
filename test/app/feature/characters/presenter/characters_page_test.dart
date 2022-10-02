@@ -24,7 +24,13 @@ void main() {
   late CharacterUseCase listCharacters;
   late CharactersStore store;
   late Widget page;
-  final character = Character(name: 'name', imageUrl: 'imageUrl', specie: '');
+  final character = Character(
+      name: 'name',
+      imageUrl: 'imageUrl',
+      specie: '',
+      status: '',
+      episodes: [],
+      created: DateTime.now());
 
   setUp(() {
     mockCharacterRepository = MockCharacterRepository();
