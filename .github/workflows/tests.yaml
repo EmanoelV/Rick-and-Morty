@@ -1,5 +1,10 @@
 name: run-tests
-on: [push, workflow_dispatch, pull_request]
+on: 
+  pull_request:
+    branches: [ master, develop ]
+  push:
+    branches: [ master, develop ]
+    
 jobs:
   drive:
     runs-on: ubuntu-latest
