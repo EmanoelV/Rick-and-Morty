@@ -18,46 +18,48 @@ void main() {
   group('listCharacters', () {
     test('should return a list of characters', () async {
       // arrange
-      when(() => datasource.listCharacters(any())).thenAnswer((_) async => []);
+      when(() => datasource.listCharacters(any(), ''))
+          .thenAnswer((_) async => []);
       // act
-      final result = await repository.listCharacters(1);
+      final result = await repository.listCharacters(1, '');
       // assert
       expect(result, []);
-      verify(() => datasource.listCharacters(1)).called(1);
+      verify(() => datasource.listCharacters(1, '')).called(1);
     });
 
     test('should throw a ServerFailure when the call to the repository fails',
         () async {
       // arrange
-      when(() => datasource.listCharacters(any())).thenThrow(ServerFailure());
+      when(() => datasource.listCharacters(any(), ''))
+          .thenThrow(ServerFailure());
       // act
       final call = repository.listCharacters;
       // assert
-      expect(() => call(1), throwsA(isA<ServerFailure>()));
+      expect(() => call(1, ''), throwsA(isA<ServerFailure>()));
     });
   });
 
   group('searchCharacterByName', () {
     test('should return a list of characters', () async {
       // arrange
-      when(() => datasource.searchCharacterByName(any()))
+      when(() => datasource.searchCharacterByName(any(), ''))
           .thenAnswer((_) async => []);
       // act
-      final result = await repository.searchCharacterByName('Rick');
+      final result = await repository.searchCharacterByName('Rick', '');
       // assert
       expect(result, []);
-      verify(() => datasource.searchCharacterByName('Rick')).called(1);
+      verify(() => datasource.searchCharacterByName('Rick', '')).called(1);
     });
 
     test('should throw a ServerFailure when the call to the repository fails',
         () async {
       // arrange
-      when(() => datasource.searchCharacterByName(any()))
+      when(() => datasource.searchCharacterByName(any(), any()))
           .thenThrow(ServerFailure());
       // act
       final call = repository.searchCharacterByName;
       // assert
-      expect(() => call('Rick'), throwsA(isA<ServerFailure>()));
+      expect(() => call('Rick', ''), throwsA(isA<ServerFailure>()));
     });
   });
 }

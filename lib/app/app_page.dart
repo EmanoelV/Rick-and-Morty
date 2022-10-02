@@ -6,9 +6,6 @@ class AppPage extends StatelessWidget {
   const AppPage({super.key});
   @override
   Widget build(BuildContext context) => MaterialApp(
-        theme: ThemeData(
-          useMaterial3: true,
-        ),
         home: CharactersPage(Dependency.charactersStore),
       );
 }

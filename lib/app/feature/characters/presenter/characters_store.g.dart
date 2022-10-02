@@ -40,6 +40,22 @@ mixin _$CharactersStore on CharactersStoreBase, Store {
     });
   }
 
+  late final _$specieAtom =
+      Atom(name: 'CharactersStoreBase.specie', context: context);
+
+  @override
+  Specie get specie {
+    _$specieAtom.reportRead();
+    return super.specie;
+  }
+
+  @override
+  set specie(Specie value) {
+    _$specieAtom.reportWrite(value, super.specie, () {
+      super.specie = value;
+    });
+  }
+
   late final _$loadingAtom =
       Atom(name: 'CharactersStoreBase.loading', context: context);
 
@@ -130,6 +146,14 @@ mixin _$CharactersStore on CharactersStoreBase, Store {
     return _$clearFilterAsyncAction.run(() => super.clearFilter());
   }
 
+  late final _$filterBySpecieAsyncAction =
+      AsyncAction('CharactersStoreBase.filterBySpecie', context: context);
+
+  @override
+  Future<void> filterBySpecie(Specie? specie) {
+    return _$filterBySpecieAsyncAction.run(() => super.filterBySpecie(specie));
+  }
+
   late final _$CharactersStoreBaseActionController =
       ActionController(name: 'CharactersStoreBase', context: context);
 
@@ -148,6 +172,7 @@ mixin _$CharactersStore on CharactersStoreBase, Store {
   String toString() {
     return '''
 characters: ${characters},
+specie: ${specie},
 loading: ${loading},
 error: ${error},
 page: ${page},

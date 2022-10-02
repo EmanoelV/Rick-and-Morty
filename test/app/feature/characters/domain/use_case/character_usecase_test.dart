@@ -18,45 +18,45 @@ void main() {
   group('list', () {
     test('should list characters', () async {
       // arrange
-      when(() => mockCharacterRepository.listCharacters(any()))
+      when(() => mockCharacterRepository.listCharacters(any(), any()))
           .thenAnswer((_) async => []);
       // act
-      await characterUseCase.list(1);
+      await characterUseCase.list(1, '');
       // assert
-      verify(() => mockCharacterRepository.listCharacters(1)).called(1);
+      verify(() => mockCharacterRepository.listCharacters(1, '')).called(1);
     });
 
     test('should throw a failure', () async {
       // arrange
-      when(() => mockCharacterRepository.listCharacters(any()))
+      when(() => mockCharacterRepository.listCharacters(any(), any()))
           .thenThrow(ServerFailure());
       // act
       final call = characterUseCase.list;
       // assert
-      expect(() => call(1), throwsA(isA<Failure>()));
+      expect(() => call(1, ''), throwsA(isA<Failure>()));
     });
   });
 
   group('searchByName', () {
     test('should search characters by name', () async {
       // arrange
-      when(() => mockCharacterRepository.searchCharacterByName(any()))
+      when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
           .thenAnswer((_) async => []);
       // act
-      await characterUseCase.searchByName('Rick');
+      await characterUseCase.searchByName('Rick', '');
       // assert
-      verify(() => mockCharacterRepository.searchCharacterByName('Rick'))
+      verify(() => mockCharacterRepository.searchCharacterByName('Rick', ''))
           .called(1);
     });
 
     test('should throw a failure', () async {
       // arrange
-      when(() => mockCharacterRepository.searchCharacterByName(any()))
+      when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
           .thenThrow(ServerFailure());
       // act
       final call = characterUseCase.searchByName;
       // assert
-      expect(() => call('Rick'), throwsA(isA<Failure>()));
+      expect(() => call('Rick', ''), throwsA(isA<Failure>()));
     });
   });
 }
