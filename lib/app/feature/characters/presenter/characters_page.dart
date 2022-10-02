@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'characters_store.dart';
-import 'widget/character_widget.dart';
+import 'widget/character_listview_widget.dart';
+import 'widget/search_by_name_widget.dart';
 
 class CharactersPage extends StatelessWidget {
   final CharactersStore store;
@@ -15,25 +16,26 @@ class CharactersPage extends StatelessWidget {
           title: const Text('Characters'),
         ),
         body: Observer(
-            builder: (context) => Center(
-                  child: store.loading && store.characters.isEmpty
-                      ? const CircularProgressIndicator()
-                      : store.hasError
-                          ? ErrorWidget(store.error!)
-                          : store.hasCharacters
-                              ? ListView.builder(
-                                  itemCount: store.characters.length + 1,
-                                  itemBuilder: (context, index) {
-                                    if (index == store.characters.length) {
-                                      store.listCharacters();
-                                      return const Center(
-                                          child: LinearProgressIndicator());
-                                    }
-                                    return CharacterWidget(
-                                        store.characters[index]);
-                                  },
-                                )
-                              : const Text('No characters'),
+            builder: (context) => Column(
+                  children: [
+                    SearchByNameWidget(store),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: store.loading && !store.hasCharacters
+                          ? const Center(child: CircularProgressIndicator())
+                          : store.hasError
+                              ? ErrorWidget(store.error!)
+                              : store.hasCharacters
+                                  ? CharacterListView(
+                                      characters: store.characters,
+                                      hasPagination: store.pagination,
+                                      loadMore: store.listCharacters,
+                                    )
+                                  : const Text('No characters'),
+                    ),
+                  ],
                 )),
       );
 }

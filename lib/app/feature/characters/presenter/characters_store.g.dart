@@ -88,12 +88,46 @@ mixin _$CharactersStore on CharactersStoreBase, Store {
     });
   }
 
+  late final _$paginationAtom =
+      Atom(name: 'CharactersStoreBase.pagination', context: context);
+
+  @override
+  bool get pagination {
+    _$paginationAtom.reportRead();
+    return super.pagination;
+  }
+
+  @override
+  set pagination(bool value) {
+    _$paginationAtom.reportWrite(value, super.pagination, () {
+      super.pagination = value;
+    });
+  }
+
   late final _$listCharactersAsyncAction =
       AsyncAction('CharactersStoreBase.listCharacters', context: context);
 
   @override
   Future<void> listCharacters() {
     return _$listCharactersAsyncAction.run(() => super.listCharacters());
+  }
+
+  late final _$searchCharactersByNameAsyncAction = AsyncAction(
+      'CharactersStoreBase.searchCharactersByName',
+      context: context);
+
+  @override
+  Future<void> searchCharactersByName(String name) {
+    return _$searchCharactersByNameAsyncAction
+        .run(() => super.searchCharactersByName(name));
+  }
+
+  late final _$clearFilterAsyncAction =
+      AsyncAction('CharactersStoreBase.clearFilter', context: context);
+
+  @override
+  Future<void> clearFilter() {
+    return _$clearFilterAsyncAction.run(() => super.clearFilter());
   }
 
   late final _$CharactersStoreBaseActionController =
@@ -117,6 +151,7 @@ characters: ${characters},
 loading: ${loading},
 error: ${error},
 page: ${page},
+pagination: ${pagination},
 hasError: ${hasError},
 hasCharacters: ${hasCharacters}
     ''';
