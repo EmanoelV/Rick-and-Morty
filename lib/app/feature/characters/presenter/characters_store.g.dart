@@ -72,12 +72,28 @@ mixin _$CharactersStore on CharactersStoreBase, Store {
     });
   }
 
+  late final _$pageAtom =
+      Atom(name: 'CharactersStoreBase.page', context: context);
+
+  @override
+  int get page {
+    _$pageAtom.reportRead();
+    return super.page;
+  }
+
+  @override
+  set page(int value) {
+    _$pageAtom.reportWrite(value, super.page, () {
+      super.page = value;
+    });
+  }
+
   late final _$listCharactersAsyncAction =
       AsyncAction('CharactersStoreBase.listCharacters', context: context);
 
   @override
-  Future<void> listCharacters(int page) {
-    return _$listCharactersAsyncAction.run(() => super.listCharacters(page));
+  Future<void> listCharacters() {
+    return _$listCharactersAsyncAction.run(() => super.listCharacters());
   }
 
   late final _$CharactersStoreBaseActionController =
@@ -100,6 +116,7 @@ mixin _$CharactersStore on CharactersStoreBase, Store {
 characters: ${characters},
 loading: ${loading},
 error: ${error},
+page: ${page},
 hasError: ${hasError},
 hasCharacters: ${hasCharacters}
     ''';

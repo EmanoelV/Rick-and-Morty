@@ -16,6 +16,8 @@ void main() {
   setUp(() {
     mockCharacterRepository = MockCharacterRepository();
     listCharacters = ListCharactersImpl(mockCharacterRepository);
+    when(() => mockCharacterRepository.listCharacters(any()))
+        .thenAnswer((_) async => []);
     store = CharactersStore(listCharacters);
   });
 
@@ -24,7 +26,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any()))
         .thenAnswer((_) async => []);
     // act
-    await store.listCharacters(1);
+    await store.listCharacters();
     // assert
     expect(store.characters, []);
   });
@@ -34,7 +36,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any()))
         .thenAnswer((_) async => []);
     // act
-    await store.listCharacters(1);
+    await store.listCharacters();
     store.reset();
     // assert
     expect(store.characters, []);
@@ -47,7 +49,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any()))
         .thenAnswer((_) async => []);
     // act
-    await store.listCharacters(1);
+    await store.listCharacters();
     // assert
     expect(store.loading, false);
   });
@@ -57,7 +59,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any()))
         .thenThrow(ServerFailure());
     // act
-    await store.listCharacters(1);
+    await store.listCharacters();
     // assert
     expect(store.error, isNotNull);
   });
@@ -67,7 +69,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any()))
         .thenThrow(ServerFailure());
     // act
-    await store.listCharacters(1);
+    await store.listCharacters();
     // assert
     expect(store.hasError, true);
   });
@@ -77,7 +79,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any()))
         .thenAnswer((_) async => [Character('', '')]);
     // act
-    await store.listCharacters(1);
+    await store.listCharacters();
     // assert
     expect(store.hasCharacters, true);
   });
@@ -87,7 +89,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any()))
         .thenAnswer((_) async => []);
     // act
-    await store.listCharacters(1);
+    await store.listCharacters();
     store.reset();
     // assert
     expect(store.hasCharacters, false);
@@ -98,7 +100,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any()))
         .thenAnswer((_) async => []);
     // act
-    await store.listCharacters(1);
+    await store.listCharacters();
     // assert
     expect(store.hasError, false);
   });

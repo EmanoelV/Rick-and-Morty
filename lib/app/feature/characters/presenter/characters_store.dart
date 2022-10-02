@@ -11,7 +11,9 @@ class CharactersStore = CharactersStoreBase with _$CharactersStore;
 abstract class CharactersStoreBase with Store {
   final ListCharacters _listCharacters;
 
-  CharactersStoreBase(this._listCharacters);
+  CharactersStoreBase(this._listCharacters) {
+    listCharacters();
+  }
 
   @observable
   ObservableList<Character> characters = <Character>[].asObservable();
@@ -22,6 +24,9 @@ abstract class CharactersStoreBase with Store {
   @observable
   Failure? error;
 
+  @observable
+  int page = 1;
+
   @action
   void reset() {
     characters.clear();
@@ -30,12 +35,13 @@ abstract class CharactersStoreBase with Store {
   }
 
   @action
-  Future<void> listCharacters(int page) async {
+  Future<void> listCharacters() async {
     loading = true;
     error = null;
     try {
       final result = await _listCharacters(page);
       characters.addAll(result);
+      page++;
     } on Failure catch (e) {
       error = e;
     } finally {
