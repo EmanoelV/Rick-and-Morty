@@ -11,7 +11,8 @@ class CharacterDatasourceImpl implements CharacterDatasource {
   @override
   Future<List<CharacterModel>> listCharacters(int page) => _dio
       .get('/character/?page=$page')
-      .then((response) => response.data['results'])
+      .then((response) =>
+          List<Map<String, dynamic>>.from(response.data['results']))
       .then((results) =>
           results.map<CharacterModel>(CharacterModel.fromJson).toList());
 }

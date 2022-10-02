@@ -12,6 +12,8 @@ class AppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: CharactersPage(CharactersStore(ListCharactersImpl(
-            CharacterRepositoryImpl(CharacterDatasourceImpl(Dio()))))),
+            CharacterRepositoryImpl(CharacterDatasourceImpl(Dio(
+          BaseOptions(baseUrl: 'https://rickandmortyapi.com/api/'),
+        )))))),
       );
 }
