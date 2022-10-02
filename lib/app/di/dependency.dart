@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 
 import '../feature/characters/domain/use_case/character_usecase.dart';
@@ -21,12 +23,14 @@ class Dependency {
     );
 
     final logInterceptor = LogInterceptor(
-      request: true,
-      requestBody: true,
-      requestHeader: true,
-      responseHeader: true,
-      responseBody: true,
-    );
+        request: true,
+        requestBody: true,
+        requestHeader: true,
+        responseHeader: true,
+        responseBody: true,
+        logPrint: (object) {
+          log(object.toString(), name: 'dio', level: 0);
+        });
 
     return Dio(options)..interceptors.add(logInterceptor);
   }

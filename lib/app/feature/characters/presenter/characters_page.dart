@@ -17,13 +17,12 @@ class CharactersPage extends StatelessWidget {
         body: Observer(
             builder: (context) => Column(
                   children: [
-                    // search bar with search button and clear button
                     SearchByNameWidget(store),
                     const SizedBox(
                       height: 10,
                     ),
                     Expanded(
-                      child: store.loading && store.characters.isEmpty
+                      child: store.loading && !store.hasCharacters
                           ? const Center(child: CircularProgressIndicator())
                           : store.hasError
                               ? ErrorWidget(store.error!)

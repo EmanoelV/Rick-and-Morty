@@ -106,6 +106,21 @@ void main() {
     expect(store.hasError, false);
   });
 
+  test('should set page to 5', () async {
+    // arrange
+    when(() => mockCharacterRepository.listCharacters(any()))
+        .thenAnswer((_) async => []);
+    // act
+    store.listCharacters();
+    store.listCharacters();
+    store.listCharacters();
+
+    await store.awaitLoading();
+
+    // assert
+    expect(store.page, 5);
+  });
+
   test('should set pagination to false', () async {
     // arrange
     when(() => mockCharacterRepository.searchCharacterByName(any()))

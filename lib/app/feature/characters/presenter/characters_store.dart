@@ -38,8 +38,15 @@ abstract class CharactersStoreBase with Store {
     page = 1;
   }
 
+  Future<void> awaitLoading() async {
+    while (loading) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+  }
+
   @action
   Future<void> listCharacters() async {
+    await awaitLoading();
     loading = true;
     error = null;
     try {

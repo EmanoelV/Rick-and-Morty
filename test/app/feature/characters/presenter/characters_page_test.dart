@@ -47,10 +47,14 @@ void main() {
   testWidgets('should render CharactersPage with loading', (tester) async {
     // arrange
     when(() => mockCharacterRepository.listCharacters(any())).thenAnswer(
-        (_) async => Future.delayed(const Duration(seconds: 1), () => []));
+        (_) async =>
+            Future.delayed(const Duration(milliseconds: 300), () => []));
     // act
-    store.listCharacters();
-    await tester.pumpWidget(page);
+    await tester.runAsync(() async {
+      store.listCharacters();
+      await Future.delayed(const Duration(milliseconds: 100));
+      await tester.pumpWidget(page);
+    });
 
     // assert
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
