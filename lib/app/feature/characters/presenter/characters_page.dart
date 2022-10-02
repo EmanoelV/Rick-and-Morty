@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'characters_store.dart';
 import 'widget/character_listview_widget.dart';
+import 'widget/search_by_name_widget.dart';
 
 class CharactersPage extends StatelessWidget {
   final CharactersStore store;
@@ -37,66 +38,4 @@ class CharactersPage extends StatelessWidget {
                   ],
                 )),
       );
-}
-
-class SearchByNameWidget extends StatelessWidget {
-  SearchByNameWidget(
-    this.store, {
-    Key? key,
-  }) : super(key: key);
-
-  final searchController = TextEditingController();
-  final CharactersStore store;
-
-  @override
-  Widget build(BuildContext context) => TextField(
-        controller: searchController,
-        decoration: InputDecoration(
-          hintText: 'Search By Name',
-          suffixIcon: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SearchByTextButtonWidget(
-                  store: store, searchController: searchController),
-              ResetFilterButtonWidget(
-                  searchController: searchController, store: store),
-            ],
-          ),
-        ),
-      );
-}
-
-class ResetFilterButtonWidget extends StatelessWidget {
-  const ResetFilterButtonWidget({
-    Key? key,
-    required this.searchController,
-    required this.store,
-  }) : super(key: key);
-
-  final TextEditingController searchController;
-  final CharactersStore store;
-
-  @override
-  Widget build(BuildContext context) => IconButton(
-      icon: const Icon(Icons.clear),
-      onPressed: () {
-        searchController.clear();
-        store.clearFilter();
-      });
-}
-
-class SearchByTextButtonWidget extends StatelessWidget {
-  const SearchByTextButtonWidget({
-    Key? key,
-    required this.store,
-    required this.searchController,
-  }) : super(key: key);
-
-  final CharactersStore store;
-  final TextEditingController searchController;
-
-  @override
-  Widget build(BuildContext context) => IconButton(
-      icon: const Icon(Icons.search),
-      onPressed: () => store.searchCharactersByName(searchController.text));
 }

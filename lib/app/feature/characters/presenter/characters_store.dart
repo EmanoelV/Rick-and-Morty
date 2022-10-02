@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../domain/entity/character.dart';
@@ -10,6 +11,7 @@ class CharactersStore = CharactersStoreBase with _$CharactersStore;
 
 abstract class CharactersStoreBase with Store {
   final CharacterUseCase _characterUseCase;
+  final TextEditingController searchController = TextEditingController();
 
   CharactersStoreBase(this._characterUseCase) {
     listCharacters();
@@ -36,6 +38,8 @@ abstract class CharactersStoreBase with Store {
     loading = false;
     error = null;
     page = 1;
+    pagination = true;
+    searchController.clear();
   }
 
   Future<void> awaitLoading() async {
@@ -79,7 +83,6 @@ abstract class CharactersStoreBase with Store {
   @action
   Future<void> clearFilter() async {
     reset();
-    pagination = true;
     listCharacters();
   }
 

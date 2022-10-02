@@ -12,6 +12,7 @@ import 'package:rick_and_morty/app/feature/characters/domain/use_case/character_
 import 'package:rick_and_morty/app/feature/characters/presenter/characters_page.dart';
 import 'package:rick_and_morty/app/feature/characters/presenter/characters_store.dart';
 import 'package:rick_and_morty/app/feature/characters/presenter/widget/character_widget.dart';
+import 'package:rick_and_morty/app/feature/characters/presenter/widget/search_by_name_widget.dart';
 
 class MockCharacterRepository extends Mock implements CharacterRepository {}
 
