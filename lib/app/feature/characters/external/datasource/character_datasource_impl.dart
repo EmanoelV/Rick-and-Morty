@@ -15,4 +15,12 @@ class CharacterDatasourceImpl implements CharacterDatasource {
           List<Map<String, dynamic>>.from(response.data['results']))
       .then((results) =>
           results.map<CharacterModel>(CharacterModel.fromJson).toList());
+
+  @override
+  Future<List<CharacterModel>> searchCharacterByName(String name) => _dio
+      .get('/character/?name=$name')
+      .then((response) =>
+          List<Map<String, dynamic>>.from(response.data['results']))
+      .then((results) =>
+          results.map<CharacterModel>(CharacterModel.fromJson).toList());
 }

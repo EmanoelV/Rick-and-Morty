@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'characters_store.dart';
-import 'widget/character_widget.dart';
+import 'widget/character_listview_widget.dart';
 
 class CharactersPage extends StatelessWidget {
   final CharactersStore store;
@@ -15,25 +15,89 @@ class CharactersPage extends StatelessWidget {
           title: const Text('Characters'),
         ),
         body: Observer(
-            builder: (context) => Center(
-                  child: store.loading && store.characters.isEmpty
-                      ? const CircularProgressIndicator()
-                      : store.hasError
-                          ? ErrorWidget(store.error!)
-                          : store.hasCharacters
-                              ? ListView.builder(
-                                  itemCount: store.characters.length + 1,
-                                  itemBuilder: (context, index) {
-                                    if (index == store.characters.length) {
-                                      store.listCharacters();
-                                      return const Center(
-                                          child: LinearProgressIndicator());
-                                    }
-                                    return CharacterWidget(
-                                        store.characters[index]);
-                                  },
-                                )
-                              : const Text('No characters'),
+            builder: (context) => Column(
+                  children: [
+                    // search bar with search button and clear button
+                    SearchByNameWidget(store),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: store.loading && store.characters.isEmpty
+                          ? const Center(child: CircularProgressIndicator())
+                          : store.hasError
+                              ? ErrorWidget(store.error!)
+                              : store.hasCharacters
+                                  ? CharacterListView(
+                                      characters: store.characters,
+                                      hasPagination: store.pagination,
+                                      loadMore: store.listCharacters,
+                                    )
+                                  : const Text('No characters'),
+                    ),
+                  ],
                 )),
       );
+}
+
+class SearchByNameWidget extends StatelessWidget {
+  SearchByNameWidget(
+    this.store, {
+    Key? key,
+  }) : super(key: key);
+
+  final searchController = TextEditingController();
+  final CharactersStore store;
+
+  @override
+  Widget build(BuildContext context) => TextField(
+        controller: searchController,
+        decoration: InputDecoration(
+          hintText: 'Search By Name',
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SearchByTextButtonWidget(
+                  store: store, searchController: searchController),
+              ResetFilterButtonWidget(
+                  searchController: searchController, store: store),
+            ],
+          ),
+        ),
+      );
+}
+
+class ResetFilterButtonWidget extends StatelessWidget {
+  const ResetFilterButtonWidget({
+    Key? key,
+    required this.searchController,
+    required this.store,
+  }) : super(key: key);
+
+  final TextEditingController searchController;
+  final CharactersStore store;
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+      icon: const Icon(Icons.clear),
+      onPressed: () {
+        searchController.clear();
+        store.clearFilter();
+      });
+}
+
+class SearchByTextButtonWidget extends StatelessWidget {
+  const SearchByTextButtonWidget({
+    Key? key,
+    required this.store,
+    required this.searchController,
+  }) : super(key: key);
+
+  final CharactersStore store;
+  final TextEditingController searchController;
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+      icon: const Icon(Icons.search),
+      onPressed: () => store.searchCharactersByName(searchController.text));
 }

@@ -2,16 +2,16 @@ import 'package:mobx/mobx.dart';
 
 import '../domain/entity/character.dart';
 import '../domain/error/error.dart';
-import '../domain/use_case/list_characters.dart';
+import '../domain/use_case/character_usecase.dart';
 
 part 'characters_store.g.dart';
 
 class CharactersStore = CharactersStoreBase with _$CharactersStore;
 
 abstract class CharactersStoreBase with Store {
-  final ListCharacters _listCharacters;
+  final CharacterUseCase _characterUseCase;
 
-  CharactersStoreBase(this._listCharacters) {
+  CharactersStoreBase(this._characterUseCase) {
     listCharacters();
   }
 
@@ -27,11 +27,15 @@ abstract class CharactersStoreBase with Store {
   @observable
   int page = 1;
 
+  @observable
+  bool pagination = true;
+
   @action
   void reset() {
     characters.clear();
     loading = false;
     error = null;
+    page = 1;
   }
 
   @action
@@ -39,7 +43,7 @@ abstract class CharactersStoreBase with Store {
     loading = true;
     error = null;
     try {
-      final result = await _listCharacters(page);
+      final result = await _characterUseCase.list(page);
       characters.addAll(result);
       page++;
     } on Failure catch (e) {
@@ -47,6 +51,29 @@ abstract class CharactersStoreBase with Store {
     } finally {
       loading = false;
     }
+  }
+
+  @action
+  Future<void> searchCharactersByName(String name) async {
+    reset();
+    loading = true;
+    error = null;
+    try {
+      final result = await _characterUseCase.searchByName(name);
+      characters.addAll(result);
+      pagination = false;
+    } on Failure catch (e) {
+      error = e;
+    } finally {
+      loading = false;
+    }
+  }
+
+  @action
+  Future<void> clearFilter() async {
+    reset();
+    pagination = true;
+    listCharacters();
   }
 
   @computed
