@@ -12,19 +12,17 @@ void main() {
   late MockCharacterRepository mockCharacterRepository;
   late CharacterUseCase listCharacters;
   late CharactersStore store;
+  final character = Character(name: 'name', imageUrl: 'imageUrl', specie: '');
 
   setUp(() {
     mockCharacterRepository = MockCharacterRepository();
     listCharacters = CharacterUseCaseImpl(mockCharacterRepository);
-    when(() => mockCharacterRepository.listCharacters(any()))
+    when(() => mockCharacterRepository.listCharacters(any(), any()))
         .thenAnswer((_) async => []);
     store = CharactersStore(listCharacters);
   });
 
   test('should list characters', () async {
-    // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
-        .thenAnswer((_) async => []);
     // act
     await store.listCharacters();
     // assert
@@ -32,9 +30,6 @@ void main() {
   });
 
   test('should reset store', () async {
-    // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
-        .thenAnswer((_) async => []);
     // act
     await store.listCharacters();
     store.reset();
@@ -46,9 +41,6 @@ void main() {
   });
 
   test('should set loading to true', () async {
-    // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
-        .thenAnswer((_) async => []);
     // act
     await store.listCharacters();
     // assert
@@ -57,7 +49,7 @@ void main() {
 
   test('should set error', () async {
     // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
+    when(() => mockCharacterRepository.listCharacters(any(), any()))
         .thenThrow(ServerFailure());
     // act
     await store.listCharacters();
@@ -67,7 +59,7 @@ void main() {
 
   test('should set hasError to true', () async {
     // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
+    when(() => mockCharacterRepository.listCharacters(any(), any()))
         .thenThrow(ServerFailure());
     // act
     await store.listCharacters();
@@ -77,8 +69,8 @@ void main() {
 
   test('should set hasCharacters to true', () async {
     // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
-        .thenAnswer((_) async => [Character('', '')]);
+    when(() => mockCharacterRepository.listCharacters(any(), any()))
+        .thenAnswer((_) async => [character]);
     // act
     await store.listCharacters();
     // assert
@@ -86,9 +78,6 @@ void main() {
   });
 
   test('should set hasCharacters to false', () async {
-    // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
-        .thenAnswer((_) async => []);
     // act
     await store.listCharacters();
     store.reset();
@@ -97,9 +86,6 @@ void main() {
   });
 
   test('should set hasError to false', () async {
-    // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
-        .thenAnswer((_) async => []);
     // act
     await store.listCharacters();
     // assert
@@ -107,9 +93,6 @@ void main() {
   });
 
   test('should set page to 5', () async {
-    // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
-        .thenAnswer((_) async => []);
     // act
     store.listCharacters();
     store.listCharacters();
@@ -123,7 +106,7 @@ void main() {
 
   test('should set pagination to false', () async {
     // arrange
-    when(() => mockCharacterRepository.searchCharacterByName(any()))
+    when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
         .thenAnswer((_) async => []);
     // act
     await store.searchCharactersByName('name');
@@ -132,9 +115,6 @@ void main() {
   });
 
   test('should set pagination to true', () async {
-    // arrange
-    when(() => mockCharacterRepository.listCharacters(any()))
-        .thenAnswer((_) async => []);
     // act
     await store.clearFilter();
     // assert
@@ -143,7 +123,7 @@ void main() {
 
   test('should list characters by name', () async {
     // arrange
-    when(() => mockCharacterRepository.searchCharacterByName(any()))
+    when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
         .thenAnswer((_) async => []);
     // act
     await store.searchCharactersByName('name');
@@ -153,7 +133,7 @@ void main() {
 
   test('should set loading to true when search characters by name', () async {
     // arrange
-    when(() => mockCharacterRepository.searchCharacterByName(any()))
+    when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
         .thenAnswer((_) async => []);
     // act
     await store.searchCharactersByName('name');
@@ -163,7 +143,7 @@ void main() {
 
   test('should set error when search characters by name', () async {
     // arrange
-    when(() => mockCharacterRepository.searchCharacterByName(any()))
+    when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
         .thenThrow(ServerFailure());
     // act
     await store.searchCharactersByName('name');
@@ -173,7 +153,7 @@ void main() {
 
   test('should set hasError to true when search characters by name', () async {
     // arrange
-    when(() => mockCharacterRepository.searchCharacterByName(any()))
+    when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
         .thenThrow(ServerFailure());
     // act
     await store.searchCharactersByName('name');
@@ -184,8 +164,8 @@ void main() {
   test('should set hasCharacters to true when search characters by name',
       () async {
     // arrange
-    when(() => mockCharacterRepository.searchCharacterByName(any()))
-        .thenAnswer((_) async => [Character('', '')]);
+    when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
+        .thenAnswer((_) async => [character]);
     // act
     await store.searchCharactersByName('name');
     // assert
@@ -195,12 +175,37 @@ void main() {
   test('should set hasCharacters to false when search characters by name',
       () async {
     // arrange
-    when(() => mockCharacterRepository.searchCharacterByName(any()))
+    when(() => mockCharacterRepository.searchCharacterByName(any(), any()))
         .thenAnswer((_) async => []);
     // act
     await store.searchCharactersByName('name');
     store.reset();
     // assert
     expect(store.hasCharacters, false);
+  });
+
+  group('specie filter', () {
+    test('should set specie filter', () async {
+      // act
+      store.filterBySpecie(Specie.human);
+      // assert
+      expect(store.specie, Specie.human);
+    });
+
+    test('should set specie filter to all', () async {
+      // act
+      store.filterBySpecie(Specie.human);
+      store.filterBySpecie(Specie.all);
+      // assert
+      expect(store.specie, Specie.all);
+    });
+
+    test('should set specie filter to all when clear filter', () async {
+      // act
+      store.filterBySpecie(Specie.human);
+      store.clearFilter();
+      // assert
+      expect(store.specie, Specie.all);
+    });
   });
 }

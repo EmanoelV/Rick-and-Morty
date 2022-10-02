@@ -21,12 +21,12 @@ void main() {
       // arrange
       when(() => dio.get(any())).thenAnswer((_) async => Response(
           data: jsonResponse,
-          requestOptions: RequestOptions(path: '/character/?page=1')));
+          requestOptions: RequestOptions(path: '/character/?page=1&species=')));
       // act
-      final result = await datasource.listCharacters(1);
+      final result = await datasource.listCharacters(1, '');
       // assert
       expect(result, const TypeMatcher<List<CharacterModel>>());
-      verify(() => dio.get('/character/?page=1')).called(1);
+      verify(() => dio.get('/character/?page=1&species=')).called(1);
     });
 
     test('should throw a ServerFailure when the call to the repository fails',
@@ -36,7 +36,7 @@ void main() {
       // act
       final call = datasource.listCharacters;
       // assert
-      expect(() => call(1), throwsA(isA<ServerFailure>()));
+      expect(() => call(1, ''), throwsA(isA<ServerFailure>()));
     });
   });
 
@@ -45,12 +45,13 @@ void main() {
       // arrange
       when(() => dio.get(any())).thenAnswer((_) async => Response(
           data: jsonResponse,
-          requestOptions: RequestOptions(path: '/character/?name=Rick')));
+          requestOptions:
+              RequestOptions(path: '/character/?name=Rick&species=')));
       // act
-      final result = await datasource.searchCharacterByName('Rick');
+      final result = await datasource.searchCharacterByName('Rick', '');
       // assert
       expect(result, const TypeMatcher<List<CharacterModel>>());
-      verify(() => dio.get('/character/?name=Rick')).called(1);
+      verify(() => dio.get('/character/?name=Rick&species=')).called(1);
     });
 
     test('should throw a ServerFailure when the call to the repository fails',
@@ -60,7 +61,7 @@ void main() {
       // act
       final call = datasource.searchCharacterByName;
       // assert
-      expect(() => call('Rick'), throwsA(isA<ServerFailure>()));
+      expect(() => call('Rick', ''), throwsA(isA<ServerFailure>()));
     });
   });
 }

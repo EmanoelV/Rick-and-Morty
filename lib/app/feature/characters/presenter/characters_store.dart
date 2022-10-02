@@ -21,6 +21,9 @@ abstract class CharactersStoreBase with Store {
   ObservableList<Character> characters = <Character>[].asObservable();
 
   @observable
+  Specie specie = Specie.all;
+
+  @observable
   bool loading = false;
 
   @observable
@@ -54,7 +57,7 @@ abstract class CharactersStoreBase with Store {
     loading = true;
     error = null;
     try {
-      final result = await _characterUseCase.list(page);
+      final result = await _characterUseCase.list(page, specie.textKey);
       characters.addAll(result);
       page++;
     } on Failure catch (e) {
@@ -71,7 +74,7 @@ abstract class CharactersStoreBase with Store {
     loading = true;
     error = null;
     try {
-      final result = await _characterUseCase.searchByName(name);
+      final result = await _characterUseCase.searchByName(name, specie.textKey);
       characters.addAll(result);
       pagination = false;
     } on Failure catch (e) {
@@ -84,7 +87,20 @@ abstract class CharactersStoreBase with Store {
   @action
   Future<void> clearFilter() async {
     reset();
+    specie = Specie.all;
     listCharacters();
+  }
+
+  @action
+  Future<void> filterBySpecie(Specie? specie) async {
+    final name = searchController.text;
+    this.specie = specie ?? Specie.all;
+    if (name.isEmpty) {
+      reset();
+      listCharacters();
+    } else {
+      searchCharactersByName(name);
+    }
   }
 
   @computed
@@ -92,4 +108,30 @@ abstract class CharactersStoreBase with Store {
 
   @computed
   bool get hasCharacters => characters.isNotEmpty;
+}
+
+enum Specie { human, alien, all }
+
+extension SpecieExtension on Specie {
+  String get textKey {
+    switch (this) {
+      case Specie.human:
+        return 'human';
+      case Specie.alien:
+        return 'alien';
+      case Specie.all:
+        return '';
+    }
+  }
+
+  String get text {
+    switch (this) {
+      case Specie.human:
+        return 'Human';
+      case Specie.alien:
+        return 'Alien';
+      case Specie.all:
+        return 'All';
+    }
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'characters_store.dart';
 import 'widget/character_listview_widget.dart';
 import 'widget/search_by_name_widget.dart';
+import 'widget/specie_filter_widget.dart';
 
 class CharactersPage extends StatelessWidget {
   final CharactersStore store;
@@ -18,7 +19,16 @@ class CharactersPage extends StatelessWidget {
         body: Observer(
             builder: (context) => Column(
                   children: [
-                    SearchByNameWidget(store),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: SearchByNameWidget(store),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: SpecieFilterWidget(store),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),

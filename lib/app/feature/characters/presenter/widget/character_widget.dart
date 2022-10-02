@@ -14,6 +14,7 @@ class CharacterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListTile(
         title: Text(character.name),
+        subtitle: Text(character.specie),
         leading: Image.network(character.imageUrl,
             errorBuilder: (context, error, stackTrace) =>
                 Image.asset(Asset.noProfileImage)),
