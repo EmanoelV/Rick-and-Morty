@@ -67,6 +67,7 @@ abstract class CharactersStoreBase with Store {
   @action
   Future<void> searchCharactersByName(String name) async {
     reset();
+    searchController.text = name;
     loading = true;
     error = null;
     try {

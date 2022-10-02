@@ -215,4 +215,20 @@ void main() {
     // assert
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
   });
+
+  testWidgets('should stay text filter when press search', (tester) async {
+    // arrange
+    when(() => mockCharacterRepository.searchCharacterByName(any()))
+        .thenAnswer((_) async => []);
+    // act
+    await tester.runAsync(() async {
+      await store.listCharacters();
+      await tester.pumpWidget(page);
+      await tester.enterText(find.byType(TextField), 'name');
+      await tester.tap(find.byType(SearchByTextButtonWidget));
+      await tester.pumpWidget(page);
+    });
+    // assert
+    expect(find.text('name'), findsOneWidget);
+  });
 }
