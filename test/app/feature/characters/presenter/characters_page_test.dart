@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -27,6 +29,8 @@ void main() {
     store = CharactersStore(listCharacters);
     page = MaterialApp(home: CharactersPage(store));
   });
+
+  setUpAll(TestWidgetsFlutterBinding.ensureInitialized);
 
   testWidgets('should render CharactersPage', (tester) async {
     // arrange
@@ -74,5 +78,25 @@ void main() {
     });
     // assert
     expect(find.byType(CharacterWidget), findsOneWidget);
+  });
+
+  testWidgets('should render linear loading when scroll to bottom',
+      (tester) async {
+    // arrange
+    when(() => mockCharacterRepository.listCharacters(any()))
+        .thenAnswer((_) async {
+      log('listCharacters called');
+      return Future.delayed(const Duration(milliseconds: 100),
+          () => List.generate(10, (index) => Character('name', '')));
+    });
+    // act
+    await tester.runAsync(() async {
+      await store.listCharacters();
+      await tester.pumpWidget(page);
+      await tester.drag(find.byType(CharactersPage), const Offset(0, -1000));
+      await tester.pumpWidget(page);
+    });
+    // assert
+    expect(find.byType(LinearProgressIndicator), findsOneWidget);
   });
 }

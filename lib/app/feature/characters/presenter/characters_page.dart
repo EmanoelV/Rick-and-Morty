@@ -16,15 +16,22 @@ class CharactersPage extends StatelessWidget {
         ),
         body: Observer(
             builder: (context) => Center(
-                  child: store.loading
+                  child: store.loading && store.characters.isEmpty
                       ? const CircularProgressIndicator()
                       : store.hasError
                           ? ErrorWidget(store.error!)
                           : store.hasCharacters
                               ? ListView.builder(
-                                  itemCount: store.characters.length,
-                                  itemBuilder: (context, index) =>
-                                      CharacterWidget(store.characters[index]),
+                                  itemCount: store.characters.length + 1,
+                                  itemBuilder: (context, index) {
+                                    if (index == store.characters.length) {
+                                      store.listCharacters();
+                                      return const Center(
+                                          child: LinearProgressIndicator());
+                                    }
+                                    return CharacterWidget(
+                                        store.characters[index]);
+                                  },
                                 )
                               : const Text('No characters'),
                 )),
