@@ -2,9 +2,16 @@ import '../entity/character.dart';
 import '../repository/character_repository.dart';
 
 abstract class CharacterUseCase {
+  /// Get characters per page and specie
   Future<List<Character>> list(int page, String specie);
+
+  /// Get character by name and specie
   Future<List<Character>> searchByName(String name, String specie);
+
+  /// Change character favorite status
   Future<void> favorite(Character character);
+
+  /// Get favorite characters
   Future<List<Character>> getFavorites();
 }
 

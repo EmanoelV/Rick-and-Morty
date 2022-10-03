@@ -22,6 +22,7 @@ class Injector {
   static FavoritesCharactersStore get favoritesStore =>
       FavoritesCharactersStore(characterUseCase);
 
+  /// initialize the async dependencies
   static Future init() async {
     sharedPreferences = await SharedPreferences.getInstance();
   }
