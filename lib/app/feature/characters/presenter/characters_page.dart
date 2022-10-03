@@ -42,6 +42,7 @@ class CharactersPage extends StatelessWidget {
                                       characters: store.characters,
                                       hasPagination: store.pagination,
                                       loadMore: store.listCharacters,
+                                      onFavorite: store.favoriteCharacter,
                                     )
                                   : const Text('No characters'),
                     ),

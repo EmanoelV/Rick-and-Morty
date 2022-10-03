@@ -103,6 +103,20 @@ abstract class CharactersStoreBase with Store {
     }
   }
 
+  @action
+  Future<void> favoriteCharacter(Character character) async {
+    try {
+      character.favorite = !character.favorite;
+      await _characterUseCase.favorite(character);
+      characters.firstWhere((char) => char.id == character.id).favorite =
+          character.favorite;
+    } on Failure catch (e) {
+      error = e;
+    } finally {
+      loading = false;
+    }
+  }
+
   @computed
   bool get hasError => error != null;
 

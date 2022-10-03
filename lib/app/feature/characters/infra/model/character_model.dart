@@ -9,6 +9,7 @@ class CharacterModel extends Character {
     required List<int> episodes,
     required DateTime created,
     required String id,
+    required bool favorite,
   }) : super(
           name: name,
           imageUrl: imageUrl,
@@ -17,6 +18,7 @@ class CharacterModel extends Character {
           episodes: episodes,
           created: created,
           id: id,
+          favorite: favorite,
         );
 
   factory CharacterModel.fromJson(Map<String, dynamic> json) => CharacterModel(
@@ -29,6 +31,7 @@ class CharacterModel extends Character {
             .toList(),
         created: DateTime.parse(json['created']),
         id: json['id'].toString(),
+        favorite: json['favorite'] ?? false,
       );
 
   factory CharacterModel.fromEntity(Character character) => CharacterModel(
@@ -39,6 +42,7 @@ class CharacterModel extends Character {
         episodes: character.episodes,
         created: character.created,
         id: character.id,
+        favorite: character.favorite,
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,8 +50,11 @@ class CharacterModel extends Character {
         'image': imageUrl,
         'species': specie,
         'status': status,
-        'episode': episodes,
+        'episode': episodes
+            .map((e) => 'https://rickandmortyapi.com/api/episode/$e')
+            .toList(),
         'created': created.toIso8601String(),
         'id': id,
+        'favorite': favorite,
       };
 }

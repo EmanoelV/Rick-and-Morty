@@ -2,6 +2,7 @@ class Character {
   final String name, imageUrl, specie, status, id;
   final List<int> episodes;
   final DateTime created;
+  bool favorite;
 
   Character({
     required this.name,
@@ -11,5 +12,6 @@ class Character {
     required this.id,
     required this.episodes,
     required this.created,
+    required this.favorite,
   });
 }

@@ -11,6 +11,7 @@ void main() {
   late MockCharacterRepository mockCharacterRepository;
   late CharacterUseCase characterUseCase;
   final character = Character(
+    favorite: false,
     id: '1',
     name: 'name',
     imageUrl: 'imageUrl',

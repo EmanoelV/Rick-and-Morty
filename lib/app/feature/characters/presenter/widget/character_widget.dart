@@ -6,10 +6,12 @@ import '../util/asset.dart';
 class CharacterWidget extends StatelessWidget {
   const CharacterWidget(
     this.character, {
+    required this.onFavorite,
     Key? key,
   }) : super(key: key);
 
   final Character character;
+  final Function(Character) onFavorite;
 
   @override
   Widget build(BuildContext context) => ListTile(
@@ -24,5 +26,26 @@ class CharacterWidget extends StatelessWidget {
           errorBuilder: (context, error, stackTrace) =>
               Image.asset(Asset.noProfileImage),
         ),
+        // add favorite button icon
+        trailing: FavoriteButton(character: character, onFavorite: onFavorite),
+      );
+}
+
+class FavoriteButton extends StatelessWidget {
+  const FavoriteButton({
+    Key? key,
+    required this.character,
+    required this.onFavorite,
+  }) : super(key: key);
+
+  final Character character;
+  final Function(Character p1) onFavorite;
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+        icon: Icon(
+          character.favorite ? Icons.favorite : Icons.favorite_border,
+        ),
+        onPressed: () => onFavorite(character),
       );
 }

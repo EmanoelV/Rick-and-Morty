@@ -8,12 +8,14 @@ class CharacterListView extends StatelessWidget {
     required this.characters,
     required this.hasPagination,
     required this.loadMore,
+    required this.onFavorite,
     Key? key,
   }) : super(key: key);
 
   final List<Character> characters;
   final bool hasPagination;
   final Function() loadMore;
+  final Function(Character) onFavorite;
 
   @override
   Widget build(BuildContext context) => ListView.builder(
@@ -26,7 +28,7 @@ class CharacterListView extends StatelessWidget {
             }
             return const SizedBox.shrink();
           }
-          return CharacterWidget(characters[index]);
+          return CharacterWidget(characters[index], onFavorite: onFavorite);
         },
       );
 }

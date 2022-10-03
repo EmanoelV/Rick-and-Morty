@@ -19,6 +19,7 @@ void main() {
   late CharacterDatasourceImpl datasource;
   late CharacterModel characterModel;
   final character = Character(
+    favorite: false,
     id: '1',
     name: 'name',
     imageUrl: 'imageUrl',

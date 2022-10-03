@@ -12,6 +12,7 @@ void main() {
   late CharacterRepositoryImpl repository;
   late MockCharacterDatasource datasource;
   final character = Character(
+    favorite: false,
     id: '1',
     name: 'name',
     imageUrl: 'imageUrl',

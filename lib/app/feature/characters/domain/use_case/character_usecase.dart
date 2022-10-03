@@ -21,7 +21,5 @@ class CharacterUseCaseImpl implements CharacterUseCase {
       _repository.searchCharacterByName(name, specie);
 
   @override
-  Future<void> favorite(Character character) {
-    return _repository.favorite(character);
-  }
+  Future<void> favorite(Character character) => _repository.favorite(character);
 }

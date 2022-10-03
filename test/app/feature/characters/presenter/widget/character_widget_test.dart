@@ -8,6 +8,7 @@ import 'package:rick_and_morty/app/routes/routes.dart';
 
 Future<void> main() async {
   final character = Character(
+      favorite: false,
       id: '1',
       name: 'name',
       imageUrl: Asset.noProfileImage,
@@ -17,7 +18,7 @@ Future<void> main() async {
       created: DateTime.now());
   final characterWidget = MaterialApp(
     routes: routes,
-    home: Scaffold(body: CharacterWidget(character)),
+    home: Scaffold(body: CharacterWidget(character, onFavorite: (_) {})),
   );
 
   setUpAll(() async {

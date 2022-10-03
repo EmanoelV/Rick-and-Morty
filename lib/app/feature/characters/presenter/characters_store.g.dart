@@ -154,6 +154,15 @@ mixin _$CharactersStore on CharactersStoreBase, Store {
     return _$filterBySpecieAsyncAction.run(() => super.filterBySpecie(specie));
   }
 
+  late final _$favoriteCharacterAsyncAction =
+      AsyncAction('CharactersStoreBase.favoriteCharacter', context: context);
+
+  @override
+  Future<void> favoriteCharacter(Character character) {
+    return _$favoriteCharacterAsyncAction
+        .run(() => super.favoriteCharacter(character));
+  }
+
   late final _$CharactersStoreBaseActionController =
       ActionController(name: 'CharactersStoreBase', context: context);
 

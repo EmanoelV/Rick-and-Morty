@@ -14,11 +14,20 @@ class CharacterDatasourceImpl implements CharacterDatasource {
 
   @override
   Future<List<CharacterModel>> listCharacters(int page, String specie) => _dio
-      .get('/character/?page=$page&species=$specie')
-      .then((response) =>
-          List<Map<String, dynamic>>.from(response.data['results']))
-      .then((results) =>
-          results.map<CharacterModel>(CharacterModel.fromJson).toList());
+          .get('/character/?page=$page&species=$specie')
+          .then((response) =>
+              List<Map<String, dynamic>>.from(response.data['results']))
+          .then((results) {
+        final characters =
+            results.map<CharacterModel>(CharacterModel.fromJson).toList();
+        // set favorites
+        final favorites = _getFavorites();
+        for (var character in characters) {
+          character.favorite =
+              favorites.where((e) => e.id == character.id).isNotEmpty;
+        }
+        return characters;
+      });
 
   @override
   Future<List<CharacterModel>> searchCharacterByName(
@@ -33,25 +42,36 @@ class CharacterDatasourceImpl implements CharacterDatasource {
   @override
   Future<void> favorite(CharacterModel character) async {
     const favoritesKey = 'favorites';
-    final favorites = _sharedPreferences.getStringList(favoritesKey) ?? [];
-    final favoritesMap = favorites.map((e) {
-      final json = jsonDecode(e);
-      return CharacterModel.fromJson(json);
-    }).toList();
+    final favorites = _getFavorites();
 
-    final index = favoritesMap.indexWhere((e) => e.id == character.id);
+    final index = favorites.indexWhere((e) => e.id == character.id);
 
     if (index == -1) {
-      favoritesMap.add(character);
+      favorites.add(character);
     } else {
-      favoritesMap.removeAt(index);
+      favorites.removeAt(index);
     }
 
-    final favoritesJson = favoritesMap.map((e) => jsonEncode(e.toJson()));
+    final favoritesJson = favorites.map((e) => jsonEncode(e.toJson()));
 
     await _sharedPreferences.setStringList(
         favoritesKey, favoritesJson.toList());
+  }
 
-    return;
+  List<CharacterModel> _getFavorites() {
+    const favoritesKey = 'favorites';
+    final favorites = _sharedPreferences.getStringList(favoritesKey) ?? [];
+    late List<CharacterModel> characters;
+    try {
+      characters = favorites.map((e) {
+        final json = jsonDecode(e);
+        return CharacterModel.fromJson(json);
+      }).toList();
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      _sharedPreferences.remove(favoritesKey);
+      characters = <CharacterModel>[];
+    }
+    return characters;
   }
 }
