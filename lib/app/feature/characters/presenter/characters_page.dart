@@ -15,6 +15,12 @@ class CharactersPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Characters'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.favorite),
+              onPressed: () => Navigator.of(context).pushNamed('/favorites'),
+            ),
+          ],
         ),
         body: Observer(
             builder: (context) => Column(
@@ -42,6 +48,7 @@ class CharactersPage extends StatelessWidget {
                                       characters: store.characters,
                                       hasPagination: store.pagination,
                                       loadMore: store.listCharacters,
+                                      onFavorite: store.favoriteCharacter,
                                     )
                                   : const Text('No characters'),
                     ),

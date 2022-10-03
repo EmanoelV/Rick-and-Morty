@@ -7,6 +7,8 @@ void main() {
   final detailCharacterPage = MaterialApp(
     home: DetailCharacterPage(
       Character(
+        favorite: false,
+        id: '1',
         name: 'name',
         imageUrl: 'imageUrl',
         specie: 'specie',

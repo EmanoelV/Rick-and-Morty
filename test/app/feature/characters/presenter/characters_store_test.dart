@@ -13,6 +13,8 @@ void main() {
   late CharacterUseCase listCharacters;
   late CharactersStore store;
   final character = Character(
+      favorite: false,
+      id: '1',
       name: 'name',
       imageUrl: 'imageUrl',
       specie: '',
@@ -26,6 +28,7 @@ void main() {
     when(() => mockCharacterRepository.listCharacters(any(), any()))
         .thenAnswer((_) async => []);
     store = CharactersStore(listCharacters);
+    registerFallbackValue(character);
   });
 
   test('should list characters', () async {
@@ -212,6 +215,54 @@ void main() {
       store.clearFilter();
       // assert
       expect(store.specie, Specie.all);
+    });
+  });
+
+  group('favorite character', () {
+    test('should add character to favorite', () async {
+      // arrange
+      when(() => mockCharacterRepository.favorite(any()))
+          .thenAnswer((_) async => true);
+      when(() => mockCharacterRepository.listCharacters(any(), any()))
+          .thenAnswer((_) async => [character]);
+
+      // act
+      await store.listCharacters();
+      await store.awaitLoading();
+      await store.favoriteCharacter(character);
+      // assert
+      expect(store.characters.first.favorite, true);
+    });
+
+    test('should remove character from favorite', () async {
+      // arrange
+      when(() => mockCharacterRepository.favorite(any()))
+          .thenAnswer((_) async => false);
+      when(() => mockCharacterRepository.listCharacters(any(), any()))
+          .thenAnswer((_) async => [character]);
+
+      // act
+      character.favorite = true;
+      await store.listCharacters();
+      await store.awaitLoading();
+      await store.favoriteCharacter(character);
+      // assert
+      expect(store.characters.first.favorite, false);
+    });
+
+    test('should set error when favorite character', () async {
+      // arrange
+      when(() => mockCharacterRepository.favorite(any()))
+          .thenThrow(ServerFailure());
+      when(() => mockCharacterRepository.listCharacters(any(), any()))
+          .thenAnswer((_) async => [character]);
+
+      // act
+      await store.listCharacters();
+      await store.awaitLoading();
+      await store.favoriteCharacter(character);
+      // assert
+      expect(store.error, isNotNull);
     });
   });
 }

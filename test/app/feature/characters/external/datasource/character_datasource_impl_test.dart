@@ -1,19 +1,41 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:rick_and_morty/app/feature/characters/domain/entity/character.dart';
 import 'package:rick_and_morty/app/feature/characters/domain/error/error.dart';
 import 'package:rick_and_morty/app/feature/characters/external/datasource/character_datasource_impl.dart';
 import 'package:rick_and_morty/app/feature/characters/infra/model/character_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MockDio extends Mock implements Dio {}
 
+class MockSharedPreferences extends Mock implements SharedPreferences {}
+
 void main() {
   late MockDio dio;
+  late MockSharedPreferences sharedPreferences;
   late CharacterDatasourceImpl datasource;
+  late CharacterModel characterModel;
+  final character = Character(
+    favorite: false,
+    id: '1',
+    name: 'name',
+    imageUrl: 'imageUrl',
+    specie: '',
+    status: '',
+    episodes: [],
+    created: DateTime.now(),
+  );
 
   setUp(() {
     dio = MockDio();
-    datasource = CharacterDatasourceImpl(dio);
+    sharedPreferences = MockSharedPreferences();
+    datasource = CharacterDatasourceImpl(dio, sharedPreferences);
+    characterModel = CharacterModel.fromEntity(character);
+    registerFallbackValue(character);
+    registerFallbackValue(characterModel);
   });
 
   group('listCharacters', () {
@@ -62,6 +84,34 @@ void main() {
       final call = datasource.searchCharacterByName;
       // assert
       expect(() => call('Rick', ''), throwsA(isA<ServerFailure>()));
+    });
+  });
+
+  group('favorite', () {
+    test('should call shared preferences methods', () async {
+      // arrange
+      when(() => sharedPreferences.getStringList(any()))
+          .thenAnswer((_) => [jsonEncode(characterModel.toJson())]);
+      when(() => sharedPreferences.setStringList(any(), any()))
+          .thenAnswer((_) async => true);
+
+      // act
+      await datasource.favorite(characterModel);
+      // assert
+      verify(() => sharedPreferences.getStringList('favorites')).called(1);
+      verify(() => sharedPreferences.setStringList('favorites', any()))
+          .called(1);
+    });
+
+    test('should throw a ServerFailure when the call to the repository fails',
+        () async {
+      // arrange
+      when(() => sharedPreferences.getStringList(any()))
+          .thenThrow(CacheFailure());
+      // act
+      final call = datasource.favorite;
+      // assert
+      expect(() => call(characterModel), throwsA(isA<CacheFailure>()));
     });
   });
 }
