@@ -26,7 +26,7 @@ void main() {
     mockCharacterRepository = MockCharacterRepository();
     listCharacters = CharacterUseCaseImpl(mockCharacterRepository);
     when(() => mockCharacterRepository.listCharacters(any(), any()))
-        .thenAnswer((_) async => []);
+        .thenAnswer((_) async => [character]);
     store = CharactersStore(listCharacters);
     registerFallbackValue(character);
   });
@@ -35,7 +35,7 @@ void main() {
     // act
     await store.listCharacters();
     // assert
-    expect(store.characters, []);
+    expect(store.characters, [character, character]);
   });
 
   test('should reset store', () async {
@@ -137,7 +137,7 @@ void main() {
     // act
     await store.searchCharactersByName('name');
     // assert
-    expect(store.characters, []);
+    expect(store.characters, [character]);
   });
 
   test('should set loading to true when search characters by name', () async {

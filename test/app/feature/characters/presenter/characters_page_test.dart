@@ -97,23 +97,6 @@ void main() {
     expect(find.byType(CharacterWidget), findsOneWidget);
   });
 
-  testWidgets('should render linear loading when scroll to bottom',
-      (tester) async {
-    // arrange
-    when(() => mockCharacterRepository.listCharacters(any(), any())).thenAnswer(
-        (_) async => Future.delayed(const Duration(milliseconds: 100),
-            () => List.generate(10, (index) => character)));
-    // act
-    await tester.runAsync(() async {
-      await store.listCharacters();
-      await tester.pumpWidget(page);
-      await tester.drag(find.byType(CharactersPage), const Offset(0, -1000));
-      await tester.pumpWidget(page);
-    });
-    // assert
-    expect(find.byType(LinearProgressIndicator), findsOneWidget);
-  });
-
   testWidgets('should render CharacterPage with loading when search by name',
       (tester) async {
     // arrange
