@@ -36,10 +36,6 @@ class Injector {
 
     final logInterceptor = LogInterceptor(
         request: true,
-        requestBody: true,
-        requestHeader: true,
-        responseHeader: true,
-        responseBody: true,
         logPrint: (object) {
           log(object.toString(), name: 'dio', level: 0);
         });

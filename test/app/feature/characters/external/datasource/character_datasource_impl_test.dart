@@ -60,6 +60,24 @@ void main() {
       // assert
       expect(() => call(1, ''), throwsA(isA<ServerFailure>()));
     });
+
+    test('should throw a NotFoundFailure when the server returns 404',
+        () async {
+      // arrange
+      when(() => dio.get(any())).thenThrow(
+        DioError(
+          requestOptions: RequestOptions(path: '/character/?page=1&species='),
+          response: Response(
+            statusCode: 404,
+            requestOptions: RequestOptions(path: '/character/?page=1&species='),
+          ),
+        ),
+      );
+      // act
+      final call = datasource.listCharacters;
+      // assert
+      expect(() => call(1, ''), throwsA(isA<NotFoundFailure>()));
+    });
   });
 
   group('searchCharacterByName', () {

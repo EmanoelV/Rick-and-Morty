@@ -45,7 +45,17 @@ void main() {
       // act
       final call = characterUseCase.list;
       // assert
-      expect(() => call(1, ''), throwsA(isA<Failure>()));
+      expect(() => call(1, ''), throwsA(isA<ServerFailure>()));
+    });
+
+    test('should return an empty list when throw NotFoundFailure', () async {
+      // arrange
+      when(() => mockCharacterRepository.listCharacters(any(), any()))
+          .thenThrow(NotFoundFailure());
+      // act
+      final result = await characterUseCase.list(1, '');
+      // assert
+      expect(result, []);
     });
   });
 

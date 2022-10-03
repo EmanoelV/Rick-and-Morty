@@ -11,3 +11,8 @@ class CacheFailure extends Failure {
   @override
   String get message => 'Cache Failure';
 }
+
+class NotFoundFailure extends Failure {
+  @override
+  String get message => 'Not Found Failure';
+}

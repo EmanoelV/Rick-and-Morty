@@ -58,6 +58,7 @@ abstract class CharactersStoreBase with Store {
     error = null;
     try {
       final result = await _characterUseCase.list(page, specie.textKey);
+      if (result.isEmpty) pagination = false;
       characters.addAll(result);
       page++;
     } on Failure catch (e) {

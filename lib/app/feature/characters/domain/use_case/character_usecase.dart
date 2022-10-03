@@ -1,4 +1,5 @@
 import '../entity/character.dart';
+import '../error/error.dart';
 import '../repository/character_repository.dart';
 
 abstract class CharacterUseCase {
@@ -21,8 +22,17 @@ class CharacterUseCaseImpl implements CharacterUseCase {
   CharacterUseCaseImpl(this._repository);
 
   @override
-  Future<List<Character>> list(int page, String specie) async =>
-      _repository.listCharacters(page, specie);
+  Future<List<Character>> list(int page, String specie) async {
+    try {
+      final characters = await _repository.listCharacters(page, specie);
+      return characters;
+    } on Failure catch (e) {
+      if (e is NotFoundFailure) {
+        return [];
+      }
+      rethrow;
+    }
+  }
 
   @override
   Future<List<Character>> searchByName(String name, String specie) async =>
