@@ -20,4 +20,10 @@ class CharacterRepositoryImpl implements CharacterRepository {
   @override
   Future<void> favorite(Character character) =>
       _dataSource.favorite(CharacterModel.fromEntity(character));
+
+  @override
+  Future<List<Character>> getFavorites() async {
+    final favorites = await _dataSource.getFavorites();
+    return favorites.map<Character>((e) => e.toEntity()).toList();
+  }
 }

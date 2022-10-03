@@ -45,6 +45,17 @@ class CharacterModel extends Character {
         favorite: character.favorite,
       );
 
+  Character toEntity() => Character(
+        name: name,
+        imageUrl: imageUrl,
+        specie: specie,
+        status: status,
+        episodes: episodes,
+        created: created,
+        id: id,
+        favorite: favorite,
+      );
+
   Map<String, dynamic> toJson() => {
         'name': name,
         'image': imageUrl,

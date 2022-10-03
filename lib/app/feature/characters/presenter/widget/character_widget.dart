@@ -45,6 +45,7 @@ class FavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) => IconButton(
         icon: Icon(
           character.favorite ? Icons.favorite : Icons.favorite_border,
+          color: character.favorite ? Colors.red : null,
         ),
         onPressed: () => onFavorite(character),
       );

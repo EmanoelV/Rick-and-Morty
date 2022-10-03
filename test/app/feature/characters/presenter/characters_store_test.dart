@@ -242,9 +242,9 @@ void main() {
           .thenAnswer((_) async => [character]);
 
       // act
+      character.favorite = true;
       await store.listCharacters();
       await store.awaitLoading();
-      await store.favoriteCharacter(character);
       await store.favoriteCharacter(character);
       // assert
       expect(store.characters.first.favorite, false);

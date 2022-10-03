@@ -5,6 +5,7 @@ abstract class CharacterUseCase {
   Future<List<Character>> list(int page, String specie);
   Future<List<Character>> searchByName(String name, String specie);
   Future<void> favorite(Character character);
+  Future<List<Character>> getFavorites();
 }
 
 class CharacterUseCaseImpl implements CharacterUseCase {
@@ -22,4 +23,7 @@ class CharacterUseCaseImpl implements CharacterUseCase {
 
   @override
   Future<void> favorite(Character character) => _repository.favorite(character);
+
+  @override
+  Future<List<Character>> getFavorites() => _repository.getFavorites();
 }

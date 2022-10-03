@@ -17,11 +17,11 @@ class CharacterDatasourceImpl implements CharacterDatasource {
           .get('/character/?page=$page&species=$specie')
           .then((response) =>
               List<Map<String, dynamic>>.from(response.data['results']))
-          .then((results) {
+          .then((results) async {
         final characters =
             results.map<CharacterModel>(CharacterModel.fromJson).toList();
         // set favorites
-        final favorites = _getFavorites();
+        final favorites = await getFavorites();
         for (var character in characters) {
           character.favorite =
               favorites.where((e) => e.id == character.id).isNotEmpty;
@@ -42,7 +42,7 @@ class CharacterDatasourceImpl implements CharacterDatasource {
   @override
   Future<void> favorite(CharacterModel character) async {
     const favoritesKey = 'favorites';
-    final favorites = _getFavorites();
+    final favorites = await getFavorites();
 
     final index = favorites.indexWhere((e) => e.id == character.id);
 
@@ -58,7 +58,8 @@ class CharacterDatasourceImpl implements CharacterDatasource {
         favoritesKey, favoritesJson.toList());
   }
 
-  List<CharacterModel> _getFavorites() {
+  @override
+  Future<List<CharacterModel>> getFavorites() async {
     const favoritesKey = 'favorites';
     final favorites = _sharedPreferences.getStringList(favoritesKey) ?? [];
     late List<CharacterModel> characters;
