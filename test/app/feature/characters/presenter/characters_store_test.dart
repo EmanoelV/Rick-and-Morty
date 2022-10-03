@@ -12,7 +12,13 @@ void main() {
   late MockCharacterRepository mockCharacterRepository;
   late CharacterUseCase listCharacters;
   late CharactersStore store;
-  final character = Character(name: 'name', imageUrl: 'imageUrl', specie: '');
+  final character = Character(
+      name: 'name',
+      imageUrl: 'imageUrl',
+      specie: '',
+      status: '',
+      episodes: [],
+      created: DateTime.now());
 
   setUp(() {
     mockCharacterRepository = MockCharacterRepository();
