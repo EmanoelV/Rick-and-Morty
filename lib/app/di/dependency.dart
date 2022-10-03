@@ -1,19 +1,26 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../feature/characters/domain/use_case/character_usecase.dart';
 import '../feature/characters/external/datasource/character_datasource_impl.dart';
 import '../feature/characters/infra/repository/character_repository_impl.dart';
 import '../feature/characters/presenter/characters_store.dart';
 
-class Dependency {
+class Injector {
+  static late SharedPreferences sharedPreferences;
   static final dio = _buildDio();
-  static final characterDatasource = CharacterDatasourceImpl(dio);
+  static final characterDatasource =
+      CharacterDatasourceImpl(dio, sharedPreferences);
   static final characterRepository =
       CharacterRepositoryImpl(characterDatasource);
   static final characterUseCase = CharacterUseCaseImpl(characterRepository);
   static final charactersStore = CharactersStore(characterUseCase);
+
+  static Future init() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
 
   static Dio _buildDio() {
     final options = BaseOptions(

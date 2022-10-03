@@ -1,6 +1,7 @@
 import '../../domain/entity/character.dart';
 import '../../domain/repository/character_repository.dart';
 import '../datasource/character_datasource.dart';
+import '../model/character_model.dart';
 
 class CharacterRepositoryImpl implements CharacterRepository {
   final CharacterDatasource _dataSource;
@@ -15,4 +16,8 @@ class CharacterRepositoryImpl implements CharacterRepository {
   Future<List<Character>> searchCharacterByName(
           String name, String specie) async =>
       _dataSource.searchCharacterByName(name, specie);
+
+  @override
+  Future<void> favorite(Character character) =>
+      _dataSource.favorite(CharacterModel.fromEntity(character));
 }

@@ -13,6 +13,7 @@ void main() {
   late CharacterUseCase listCharacters;
   late CharactersStore store;
   final character = Character(
+      id: '1',
       name: 'name',
       imageUrl: 'imageUrl',
       specie: '',

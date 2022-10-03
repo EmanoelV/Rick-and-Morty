@@ -25,6 +25,7 @@ void main() {
   late CharactersStore store;
   late Widget page;
   final character = Character(
+      id: '1',
       name: 'name',
       imageUrl: 'imageUrl',
       specie: '',

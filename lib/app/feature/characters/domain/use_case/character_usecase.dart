@@ -4,6 +4,7 @@ import '../repository/character_repository.dart';
 abstract class CharacterUseCase {
   Future<List<Character>> list(int page, String specie);
   Future<List<Character>> searchByName(String name, String specie);
+  Future<void> favorite(Character character);
 }
 
 class CharacterUseCaseImpl implements CharacterUseCase {
@@ -18,4 +19,9 @@ class CharacterUseCaseImpl implements CharacterUseCase {
   @override
   Future<List<Character>> searchByName(String name, String specie) async =>
       _repository.searchCharacterByName(name, specie);
+
+  @override
+  Future<void> favorite(Character character) {
+    return _repository.favorite(character);
+  }
 }

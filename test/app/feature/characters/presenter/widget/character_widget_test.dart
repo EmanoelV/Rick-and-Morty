@@ -8,6 +8,7 @@ import 'package:rick_and_morty/app/routes/routes.dart';
 
 Future<void> main() async {
   final character = Character(
+      id: '1',
       name: 'name',
       imageUrl: Asset.noProfileImage,
       specie: '',

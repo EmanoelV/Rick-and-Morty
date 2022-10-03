@@ -8,6 +8,7 @@ class CharacterModel extends Character {
     required String status,
     required List<int> episodes,
     required DateTime created,
+    required String id,
   }) : super(
           name: name,
           imageUrl: imageUrl,
@@ -15,6 +16,7 @@ class CharacterModel extends Character {
           status: status,
           episodes: episodes,
           created: created,
+          id: id,
         );
 
   factory CharacterModel.fromJson(Map<String, dynamic> json) => CharacterModel(
@@ -26,5 +28,26 @@ class CharacterModel extends Character {
             .map((e) => int.parse(e.split('/').last))
             .toList(),
         created: DateTime.parse(json['created']),
+        id: json['id'].toString(),
       );
+
+  factory CharacterModel.fromEntity(Character character) => CharacterModel(
+        name: character.name,
+        imageUrl: character.imageUrl,
+        specie: character.specie,
+        status: character.status,
+        episodes: character.episodes,
+        created: character.created,
+        id: character.id,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'image': imageUrl,
+        'species': specie,
+        'status': status,
+        'episode': episodes,
+        'created': created.toIso8601String(),
+        'id': id,
+      };
 }
